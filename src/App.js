@@ -1,25 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React , { useEffect , useState } from 'react';
+import { Home } from "./Pages/Home";
+import { Header } from "./components/Header/Header";
+import axios from 'axios'
+import { sort } from "./Utils/utils";
+
+
+export const MainContext = React.createContext()
+
 
 function App() {
+
+  const [currentPizza, setPizza] = useState('Все')
+  const [activePopupItem, setPopupItem] = useState('популярности')
+  const [getPizzas, setPizzas] = useState([])
+  const [staticPizzas, setStaticPizzas] = useState([])
+
+  useEffect(() => {
+    setPizzas(sort(staticPizzas, currentPizza, activePopupItem))
+  }, [staticPizzas,currentPizza, activePopupItem])
+
+  useEffect( () => {
+
+     axios.get('/db.json')
+          .then(({data}) => {
+            setStaticPizzas(data.pizzas)
+            setPizzas(data.pizzas)
+          })
+
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MainContext.Provider value={
+      {
+        currentPizza,
+        setPizza,
+        getPizzas,
+        activePopupItem,
+        setPopupItem
+      }
+    }>
+
+      <div className="App">
+        <div className="wrapper">
+
+          <Header />
+
+          <div className="content">
+
+            <Home />
+
+          </div>
+        </div>
+      </div>
+
+    </MainContext.Provider>
   );
 }
 

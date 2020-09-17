@@ -1,13 +1,26 @@
-import React , { useContext , useState } from "react";
-import { MainContext } from "../../App";
+import React , { useState } from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { SET__SORT } from "../../redux/actions";
+
 
 const sort = ['популярности','цене','алфавиту']
 
-export function Sort() {
+function createSortItems(activePopupItem, onSelectItem) {
+
+    return (item) => {
+        return <li
+          className={activePopupItem === item ? 'active' : ''}
+          onClick={() => onSelectItem(item)}
+          key={item}>{item}
+        </li>
+    }
+}
+
+export const Sort = React.memo( () => {
 
     const [getPopup, setPopup] = useState(0)
-
-    const { activePopupItem, setPopupItem } = useContext(MainContext)
+    const activePopupItem = useSelector(({sort}) => sort)
+    const dispatch = useDispatch()
 
     const active = getPopup === 0 ? 1 : 0
 
@@ -16,7 +29,7 @@ export function Sort() {
     }
 
     const onSelectItem = (item) => {
-        setPopupItem(item)
+        dispatch(SET__SORT(item))
         setPopup(active)
     }
 
@@ -52,16 +65,10 @@ export function Sort() {
           >
           <ul>
                 {
-                    sort && sort.map(item => {
-                       return <li
-                                className={activePopupItem === item ? 'active' : ''}
-                                onClick={() => onSelectItem(item)}
-                                key={item}>{item}
-                              </li>
-                    })
+                    sort && sort.map(createSortItems(activePopupItem, onSelectItem))
                 }
           </ul>
-    </div>
       </div>
+    </div>
     )
-}
+})

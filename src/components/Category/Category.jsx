@@ -1,5 +1,6 @@
-import React , { useContext , useState } from "react";
-import { MainContext } from "../../App";
+import React from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { SET__CATEGORY } from "../../redux/actions";
 
 
 export const category = ['Мясные','Вегетарианская','Гриль','Острые','Закрытые']
@@ -17,28 +18,23 @@ const createCategory = (activeItem, onSelectItem) => {
     }
 }
 
-export function Category() {
+export const Category = React.memo(() =>{
 
-    const [activeItem, setItem] = useState('Все')
-    const { setPizza } = useContext(MainContext)
+    const dispatch = useDispatch()
+    const activeItem = useSelector(({category}) => category)
 
-
-    const onSelectItem = item => {
-        setItem( item )
-        setPizza( item )
-    }
+    const onSelectItem = item => dispatch(SET__CATEGORY(item))
 
     return (
       <ul>
           <li
-            onClick={ () =>
-              onSelectItem( 'Все' )
-            }
+            onClick={ () => onSelectItem( 'Все' ) }
             className={activeItem === 'Все' ? 'active' : ''}
-            >Все</li>
+            >Все
+          </li>
           {
               category && category.map(createCategory(activeItem, onSelectItem))
           }
       </ul>
     )
-}
+})

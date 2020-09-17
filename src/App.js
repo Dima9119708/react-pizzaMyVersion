@@ -1,59 +1,28 @@
-import React , { useEffect , useState } from 'react';
-import { Home } from "./Pages/Home";
-import { Header } from "./components/Header/Header";
+import React , { useEffect } from 'react';
 import axios from 'axios'
-import { sort } from "./Utils/utils";
-
-
-export const MainContext = React.createContext()
+import { useDispatch } from "react-redux";
+import { SET__PIZZAS , SET__STATIC__PIZZA } from "./redux/actions";
+import { Main } from "./Pages/Main";
 
 
 function App() {
 
-  const [currentPizza, setPizza] = useState('Все')
-  const [activePopupItem, setPopupItem] = useState('популярности')
-  const [getPizzas, setPizzas] = useState([])
-  const [staticPizzas, setStaticPizzas] = useState([])
-
-  useEffect(() => {
-    setPizzas(sort(staticPizzas, currentPizza, activePopupItem))
-  }, [staticPizzas,currentPizza, activePopupItem])
+  const dispatch = useDispatch()
 
   useEffect( () => {
 
      axios.get('/db.json')
           .then(({data}) => {
-            setStaticPizzas(data.pizzas)
-            setPizzas(data.pizzas)
+              dispatch(SET__STATIC__PIZZA(data.pizzas))
+              dispatch(SET__PIZZAS(data.pizzas))
           })
 
-  }, [])
+  }, [dispatch])
 
   return (
-    <MainContext.Provider value={
-      {
-        currentPizza,
-        setPizza,
-        getPizzas,
-        activePopupItem,
-        setPopupItem
-      }
-    }>
-
       <div className="App">
-        <div className="wrapper">
-
-          <Header />
-
-          <div className="content">
-
-            <Home />
-
-          </div>
-        </div>
+        <Main />
       </div>
-
-    </MainContext.Provider>
   );
 }
 

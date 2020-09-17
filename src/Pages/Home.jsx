@@ -1,8 +1,10 @@
 import { category , Category } from "../components/Category/Category";
 import { Sort } from "../components/Sort/Sort";
-import React , { useContext } from "react";
-import { MainContext } from "../App";
+import React , { useEffect } from "react";
 import { Card } from "../components/PizzasCard/Card";
+import { useDispatch , useSelector } from "react-redux";
+import { SET__PIZZAS } from "../redux/actions";
+import { sortPizzas } from "../Utils/utils";
 
 
 function createCard(item, index) {
@@ -16,9 +18,22 @@ function createCard(item, index) {
 
 export function Home() {
 
-    let { currentPizza, getPizzas } = useContext(MainContext)
+    const dispatch = useDispatch()
+    const state = useSelector((state) => state || {})
 
-    const title = () => typeof currentPizza === 'number' ? category[currentPizza] : currentPizza
+    const { staticPizza = [],
+            category : currentCategory,
+            sort,
+            pizzas : getPizzas } = state
+
+
+    useEffect(() => {
+        dispatch(SET__PIZZAS(sortPizzas(staticPizza,currentCategory, sort)))
+    }, [dispatch, staticPizza, currentCategory, sort])
+
+    const title = () => typeof currentCategory === 'number'
+                        ? category[currentCategory]
+                        : currentCategory
 
     return (
       <div className="container">
@@ -37,8 +52,7 @@ export function Home() {
 
           <div className="content__items">
 
-              { getPizzas && getPizzas.map(createCard)}
-
+              { getPizzas && getPizzas.map(createCard) }
 
           </div>
       </div>

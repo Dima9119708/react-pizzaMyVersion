@@ -1,4 +1,4 @@
-export function sort(getPizzas, currPizza, popupItem) {
+export function sortPizzas(getPizzas, currPizza, popupItem) {
 
     const items = []
 
@@ -30,7 +30,17 @@ function popupSortLogic(popupItem, array) {
         return [ ...array.sort((a,b) => b.price - a.price )]
     }
     else if ( popupItem === 'алфавиту') {
-        return [ ...array.sort((a,b) =>  a.name < b.name) ]
+
+        return array.sort((a, b) => a.name < b.name ? - 1 : Number(a.name > b.name))
+
+    }
+}
+
+export function storage(value) {
+
+    if (value) {
+        return localStorage.setItem('react-pizza', JSON.stringify(value))
     }
 
+    return JSON.parse( localStorage.getItem('react-pizza') )
 }

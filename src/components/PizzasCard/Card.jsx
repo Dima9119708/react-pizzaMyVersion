@@ -1,4 +1,6 @@
 import React , { useState } from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { SET__BASKET } from "../../redux/actions";
 
 function createType (activeType, types, fnType) {
 
@@ -39,13 +41,34 @@ function createSizes ( activeSize, sizes, fnSize ) {
 
 }
 
-export function Card({ category,id, imageUrl, name, price,rating, sizes, types }) {
+
+export function Card({ id, imageUrl, name, price,sizes, types }) {
 
     const type = ['тонкое', 'традиционное']
-    const [activeType, setType] = useState(types[0])
-
     const size = [26, 30, 40]
+
+    const [activeType, setType] = useState(types[0])
     const [activeSize, setSize] = useState(sizes[0])
+
+    const dispatch = useDispatch()
+
+    const basket = useSelector(({basket}) => basket || {})
+
+    const saveCount = {}
+
+    Object.keys(basket).forEach(item => {
+
+        if (id === basket[item].id) {
+
+            if (saveCount[name]) {
+                saveCount[name] += basket[item].count
+            }
+            else {
+                saveCount[name] = basket[item].count
+            }
+        }
+
+    })
 
     const onSeleteType = (index) => {
         setType(index)
@@ -53,6 +76,24 @@ export function Card({ category,id, imageUrl, name, price,rating, sizes, types }
 
     const onSeleteSize = (item) => {
         setSize(item)
+    }
+
+    const addBasket = () => {
+
+        const formatId = id+type[activeType]+activeSize
+
+        const cardData = {
+            type : type[activeType],
+            size : activeSize,
+            count : basket[formatId] ? basket[formatId].count += 1 : 1,
+            price : basket[formatId] ? basket[formatId].count * price : price,
+            priceStatic : price,
+            name,
+            imageUrl,
+            id
+        }
+
+        dispatch(SET__BASKET(id, formatId, cardData))
     }
 
     return (
@@ -73,7 +114,10 @@ export function Card({ category,id, imageUrl, name, price,rating, sizes, types }
           </div>
           <div className="pizza-block__bottom">
               <div className="pizza-block__price">от {price} ₽</div>
-              <div className="button button--outline button--add">
+              <div
+                onClick={addBasket}
+
+                className="button button--outline button--add">
                   <svg
                     width="12"
                     height="12"
@@ -86,8 +130,12 @@ export function Card({ category,id, imageUrl, name, price,rating, sizes, types }
                         fill="white"
                       />
                   </svg>
-                  <span>Добавить</span>
+                  <span
 
+                  >
+                      Добавить
+                  </span>
+                  { saveCount[name] ? <i>{saveCount[name]}</i> : '' }
               </div>
           </div>
       </div>

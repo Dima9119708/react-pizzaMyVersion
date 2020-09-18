@@ -36,7 +36,7 @@ export function Home() {
                         : currentCategory
 
     return (
-      <div className="container">
+      <div className="container ">
           <div className="content__top">
               <div className="categories">
 
@@ -51,10 +51,9 @@ export function Home() {
           <h2 className="content__title">{title()} пиццы</h2>
 
           <div className="content__items">
-
-              { getPizzas && getPizzas.map(createCard) }
-
+                { getPizzas && getPizzas.map(createCard) }
           </div>
+
       </div>
     )
 }

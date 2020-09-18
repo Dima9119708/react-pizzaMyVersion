@@ -1,6 +1,7 @@
 import React , { useState } from "react";
 import { useDispatch , useSelector } from "react-redux";
 import { SET__BASKET } from "../../redux/actions";
+import { Animate } from "../Animate/Animate";
 
 function createType (activeType, types, fnType) {
 
@@ -97,6 +98,7 @@ export function Card({ id, imageUrl, name, price,sizes, types }) {
     }
 
     return (
+      <Animate className="animate-start">
       <div className="pizza-block">
           <img
             className="pizza-block__image"
@@ -139,5 +141,6 @@ export function Card({ id, imageUrl, name, price,sizes, types }) {
               </div>
           </div>
       </div>
+      </Animate>
     )
 }

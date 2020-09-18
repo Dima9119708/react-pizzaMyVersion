@@ -1,0 +1,17 @@
+
+.animate-start {
+  opacity: 1;
+  animation: 1s animate-s;
+  transition: opacity .4s linear;
+}
+
+@keyframes animate-s {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4f0d150be42830d9015b04663975bb90",
+    "revision": "3faf358536f210c6537435e9090616b1",
     "url": "/react-pizzaMyVersion/index.html"
   },
   {
-    "revision": "2b96abb8512ecc2969e5",
+    "revision": "5893e987337dd6ce1d8f",
     "url": "/react-pizzaMyVersion/static/css/main.07a1e335.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-pizzaMyVersion/static/js/2.e9f71550.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2b96abb8512ecc2969e5",
-    "url": "/react-pizzaMyVersion/static/js/main.3fa871eb.chunk.js"
+    "revision": "5893e987337dd6ce1d8f",
+    "url": "/react-pizzaMyVersion/static/js/main.0c66e842.chunk.js"
   },
   {
     "revision": "15831fe94910caeb0356",

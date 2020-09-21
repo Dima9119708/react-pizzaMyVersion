@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { SET__DECREMENT , SET__DELETE__CARD , SET__INСREMENT } from "../../redux/actions";
 
@@ -7,6 +7,7 @@ export function BasketItem(props) {
     let { keyLS, id, imageUrl, type, size, count, price, priceStatic, name } = props
 
     const dispatch = useDispatch()
+    const $priceBlock = useRef(null)
 
     const increment = () => {
         dispatch(SET__INСREMENT(
@@ -83,7 +84,9 @@ export function BasketItem(props) {
               >
           </div>
           <div className="cart__item-price">
-              <b>{price} ₽</b>
+              <b
+              ref={$priceBlock}
+              >{ price } ₽</b>
           </div>
           <div
             onClick={deleteCard}

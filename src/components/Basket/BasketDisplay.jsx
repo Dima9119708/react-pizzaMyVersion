@@ -1,22 +1,39 @@
-import React from "react";
+import React , { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch , useSelector } from "react-redux";
 import { BasketItem } from "./BasketItem";
 import { SET__CLEAR__ALL } from "../../redux/actions";
+import ReactPaginate from 'react-paginate';
+
+
+const createItem = (basket) => {
+    return Object.keys(basket)
+              .map( (item,index) =>
+                <BasketItem key={item} keyLS={item} { ...basket[item]  } />)
+}
 
 export function BasketDisplay() {
 
     const state = useSelector((state) => state || {})
-
-    const {  countCards,
-             totalCount,
-             basket
-    } = state
-
     const dispatch = useDispatch()
+    const [activePage, setActivePage] = useState(0)
+
+    const { countCards, totalCount, basket } = state
 
     const clearAll = () => {
         dispatch(SET__CLEAR__ALL())
+    }
+
+    const showItems = 5
+    const pagesCount = Math.ceil( Object.keys(basket).length / showItems )
+
+    const start = activePage * showItems
+    const finish = start + showItems
+
+    const items = createItem(basket).slice(start, finish)
+
+    if (!items.length) {
+        setActivePage(activePage - 1)
     }
 
     return ( 
@@ -58,12 +75,25 @@ export function BasketDisplay() {
             </div>
             <div className="content__items">
 
-                {
-                    Object.keys(basket)
-                         .map( (item,index) =>
-                            <BasketItem key={item} keyLS={item} { ...basket[item]  } />)
-                }
+                { items }
 
+            </div>
+
+            <div
+              style={{
+                  display : Object.keys(basket).length > showItems ? "flex" : 'none'
+              }}
+              className="pagination"
+            >
+              <ReactPaginate
+
+                previousLabel={false}
+                nextLabel={false}
+                activeClassName={'active'}
+                onPageChange={ (page) => setActivePage(page.selected)}
+                pageCount={pagesCount}
+
+              />
             </div>
             <div className="cart__bottom">
                 <div className="cart__bottom-details">

@@ -2,6 +2,7 @@
 @import 'variables';
 @import 'libs/normalize';
 @import "animate";
+@import "pagination";
 
 @import 'components/all';
 
@@ -310,4 +311,8 @@ body {
       font-size: 18px;
     }
   }
+}
+
+.previous {
+  cursor: pointer;
 }

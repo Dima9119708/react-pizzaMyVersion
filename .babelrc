@@ -1,0 +1,12 @@
+{
+  "presets": [
+    "react-app"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-spread",
+    "transform-es2015-spread",
+    "transform-object-rest-spread",
+    "@babel/plugin-syntax-object-rest-spread",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
+}

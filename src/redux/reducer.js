@@ -15,6 +15,19 @@ const initialState = {
     ...storage()
 }
 
+
+const reCalc = (obj) => {
+
+    const object = {...obj}
+
+    object.countCards = Object.keys(object.basket).length
+    object.totalCount = Object
+                      .values(object.basket)
+                      .reduce((acc, item) => acc += item.price, 0)
+
+    return {...object}
+}
+
 export function reducer(state = initialState, action) {
 
     switch ( action.type ) {
@@ -55,14 +68,10 @@ export function reducer(state = initialState, action) {
                 [action.formatId] : action.params
             }
 
-            basketState.countCards = Object.keys(basketState.basket).length
-            basketState.totalCount = Object
-                                  .values(basketState.basket)
-                                  .reduce((acc, item) => acc += item.price, 0)
-
             return {
                 ...state,
-                ...basketState
+                ...basketState,
+                ...reCalc(basketState)
             }
 
         case SET_INСREMENT :
@@ -72,13 +81,11 @@ export function reducer(state = initialState, action) {
             incSave.basket[action.id].count = action.INСREMENT
             incSave.basket[action.id].price = action.price
 
-            incSave.totalCount = Object
-                                  .values(incSave.basket)
-                                  .reduce((acc, item) => acc += item.price, 0)
 
             return {
                 ...state,
-                ...incSave
+                ...incSave,
+                ...reCalc(incSave)
             }
 
         case SET_DECREMENT :
@@ -88,13 +95,10 @@ export function reducer(state = initialState, action) {
             decSave.basket[action.id].count = action.DECREMENT
             decSave.basket[action.id].price = action.price
 
-            decSave.totalCount = Object
-                                  .values(decSave.basket)
-                                  .reduce((acc, item) => acc += item.price, 0)
-
             return {
                 ...state,
-                ...decSave
+                ...decSave,
+                ...reCalc(decSave)
             }
 
         case SET_DELETE_CARD :
@@ -103,14 +107,10 @@ export function reducer(state = initialState, action) {
 
             delete deleteCard.basket[action.key]
 
-            deleteCard.countCards = Object.keys(deleteCard.basket).length
-            deleteCard.totalCount = Object
-                                      .values(deleteCard.basket)
-                                      .reduce((acc, item) => acc += item.price, 0)
-
             return {
                 ...state,
-                ...deleteCard
+                ...deleteCard,
+                ...reCalc(deleteCard)
             }
 
         case SET_CLEAR_ALL :
@@ -121,7 +121,8 @@ export function reducer(state = initialState, action) {
 
             return {
                 ...state,
-                ...deleteAll
+                ...deleteAll,
+                ...reCalc(deleteAll)
             }
 
         default :
